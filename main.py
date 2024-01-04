@@ -12,6 +12,7 @@ from aiogram.types import Message
 from aiogram.utils.markdown import hbold
 
 from llamaapi import LlamaAPI
+from app.keyboards import main
 
 load_dotenv()
 dp = Dispatcher()
@@ -20,7 +21,7 @@ llama = LlamaAPI(os.getenv('API_KEY'))
 
 @dp.message(CommandStart())
 async def command_start_handler(message: Message) -> None:
-    await message.answer(f"Hello, {hbold(message.from_user.full_name)}!")
+    await message.answer(f"Hello, {hbold(message.from_user.full_name)}!", reply_markup=main)
 
 
 @dp.message()
@@ -39,6 +40,11 @@ async def echo_message_handler(message: Message) -> None:
     except Exception as e:
         logging.error(e)
         await message.reply(message.text)
+
+
+@dp.message(text='Timetable')
+async def timetable_handler(message: Message) -> None:
+    await message.answer('Timetable')
 
 
 async def main() -> None:
