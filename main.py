@@ -1,6 +1,9 @@
+import os
 import asyncio
 import logging
 import sys
+
+from dotenv import load_dotenv
 
 from aiogram import Bot, Dispatcher
 from aiogram.enums import ParseMode
@@ -10,11 +13,9 @@ from aiogram.utils.markdown import hbold
 
 from llamaapi import LlamaAPI
 
-TOKEN = "6970181638:AAGn60KouG0PfzC9ZC-sGdHi3WVKw0GBTfI"
-API = "LL-QNtNcVGtlWyrmKX4cfeomcKO08b4x0qxcX8jYqOKkceKtGINXl5HDaLktxFDCfd9"
-
+load_dotenv()
 dp = Dispatcher()
-llama = LlamaAPI(API)
+llama = LlamaAPI(os.getenv('API_KEY'))
 
 
 @dp.message(CommandStart())
@@ -24,20 +25,24 @@ async def command_start_handler(message: Message) -> None:
 
 @dp.message()
 async def echo_message_handler(message: Message) -> None:
-    request = {
-        "messages": [
-            {
-                "role": "user",
-                "content": message.text,
-            }
-        ]
-    }
-    response = llama.run(request).json()
-    await message.reply(response["choices"][0]["message"]["content"])
+    try:
+        request = {
+            "messages": [
+                {
+                    "role": "user",
+                    "content": message.text,
+                }
+            ]
+        }
+        response = llama.run(request).json()
+        await message.reply(response["choices"][0]["message"]["content"])
+    except Exception as e:
+        logging.error(e)
+        await message.reply(message.text)
 
 
 async def main() -> None:
-    bot = Bot(TOKEN, parse_mode=ParseMode.HTML)
+    bot = Bot(os.getenv('TOKEN'), parse_mode=ParseMode.HTML)
     await dp.start_polling(bot)
 
 
