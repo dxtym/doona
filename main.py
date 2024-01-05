@@ -2,26 +2,37 @@ import os
 import asyncio
 import logging
 import sys
+import requests
 
 from dotenv import load_dotenv
 
 from aiogram import Bot, Dispatcher
 from aiogram.enums import ParseMode
-from aiogram.filters import CommandStart
-from aiogram.types import Message
+from aiogram.filters.command import Command
+from aiogram.types import Message, BotCommand
 from aiogram.utils.markdown import hbold
 
 from llamaapi import LlamaAPI
-from app.keyboards import main
 
 load_dotenv()
 dp = Dispatcher()
 llama = LlamaAPI(os.getenv('API_KEY'))
 
 
-@dp.message(CommandStart())
+@dp.message(Command("start"))
 async def command_start_handler(message: Message) -> None:
-    await message.answer(f"Hello, {hbold(message.from_user.full_name)}!", reply_markup=main)
+    await message.answer(f"Hello, {hbold(message.from_user.full_name)}!")
+
+
+@dp.message(Command("waifu"))
+async def command_waifu_handler(message: Message) -> None:
+    try:
+        url = os.getenv("API_URL")
+        response = requests.get(url).json()
+        await message.reply_photo(response["url"])
+    except Exception as e:
+        logging.error(e)
+        await message.answer("Something went wrong")
 
 
 @dp.message()
@@ -42,13 +53,13 @@ async def echo_message_handler(message: Message) -> None:
         await message.reply(message.text)
 
 
-@dp.message(text='Timetable')
-async def timetable_handler(message: Message) -> None:
-    await message.answer('Timetable')
-
-
 async def main() -> None:
     bot = Bot(os.getenv('TOKEN'), parse_mode=ParseMode.HTML)
+    await bot.set_my_commands([
+        BotCommand(command="/start", description="Start the bot"),
+        BotCommand(command="/waifu", description="Get a random waifu"),
+        BotCommand(command="/support", description="Call for support"),
+    ])
     await dp.start_polling(bot)
 
 
