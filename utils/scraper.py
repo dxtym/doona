@@ -1,7 +1,21 @@
-import requests
-from bs4 import BeautifulSoup
+import os
+import time
+from dotenv import load_dotenv
+from selenium import webdriver
+from selenium.webdriver.common.by import By
 
-response = requests.get('https://intranet.wiut.uz/TimeTableNew/GetLessons')
-soup = BeautifulSoup(response.text, 'html.parser')
+load_dotenv()
 
-# TODO
+chrome_options = webdriver.ChromeOptions()
+chrome_options.add_experimental_option("detach", True)
+
+driver = webdriver.Chrome()
+driver.get(os.getenv("SCRAPE_URL"))
+
+driver.find_element(By.ID, "user").send_keys(os.getenv("SCRAPE_USERNAME"))
+driver.find_element(By.ID, "pass").send_keys(os.getenv("SCRAPE_PASSWORD"))
+driver.find_element(By.CLASS_NAME, "btn").click()
+
+time.sleep(5)
+
+# driver.close()
