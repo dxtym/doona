@@ -3,8 +3,11 @@ import asyncio
 import logging
 import sys
 import requests
+from datetime import datetime
 
 from dotenv import load_dotenv
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from app.database.timetable import show_timetable, show_timetable_by_day
 
 from aiogram import Bot, Dispatcher
 from aiogram.enums import ParseMode
@@ -35,6 +38,11 @@ async def command_waifu_handler(message: Message) -> None:
         await message.answer("Something went wrong")
 
 
+@dp.message(Command("support"))
+async def command_support_handler(message: Message) -> None:
+    await message.answer("Please contact @thisisdilmurod for support")
+
+
 @dp.message()
 async def echo_message_handler(message: Message) -> None:
     try:
@@ -42,7 +50,7 @@ async def echo_message_handler(message: Message) -> None:
             "messages": [
                 {
                     "role": "user",
-                    "content": message.text,
+                    "content": "Act as my assistant bot namely Doona," + message.text,
                 }
             ]
         }
@@ -58,8 +66,15 @@ async def main() -> None:
     await bot.set_my_commands([
         BotCommand(command="/start", description="Start the bot"),
         BotCommand(command="/waifu", description="Get a random waifu"),
+        BotCommand(command="/timetable", description="View weekly timetable"),
+        BotCommand(command="/weather", description="Check out the weather"),
         BotCommand(command="/support", description="Call for support"),
     ])
+    scheduler = AsyncIOScheduler(timezone='Asia/Tashkent')
+    day = datetime.now().strftime("%A")
+    scheduler.add_job(show_timetable_by_day(bot, day), trigger='cron', hour=16, minute=14, start_date=datetime.now(),
+                      kwargs={'bot': bot})
+    scheduler.start()
     await dp.start_polling(bot)
 
 

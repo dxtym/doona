@@ -1,10 +1,33 @@
 import os
-import time
+import re
+import sqlite3 as sql
+
+from collections import defaultdict
 from dotenv import load_dotenv
+from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
 load_dotenv()
+
+db = sql.connect("../app/database/timetable.db")
+cursor = db.cursor()
+
+def start_timetable():
+    cursor.execute("CREATE TABLE IF NOT EXISTS timetable(day TEXT, subject TEXT, type TEXT)")
+    db.commit()
+
+def fill_timetable(day, subject, type):
+    cursor.execute(f"INSERT INTO timetable(day, subject, type) VALUES('{day}', '{subject}', '{type}')")
+    db.commit()
+
+def show_timetable():
+    cursor.execute("SELECT * FROM timetable")
+    return cursor.fetchall()
+
+start_timetable()
+
+COURSE_PATTERN = re.compile(fr"{os.getenv('COURSE_PATTERN')}")
 
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_experimental_option("detach", True)
@@ -16,6 +39,25 @@ driver.find_element(By.ID, "user").send_keys(os.getenv("SCRAPE_USERNAME"))
 driver.find_element(By.ID, "pass").send_keys(os.getenv("SCRAPE_PASSWORD"))
 driver.find_element(By.CLASS_NAME, "btn").click()
 
-time.sleep(5)
+weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
+lessons = defaultdict(set)
 
-# driver.close()
+for weekday in weekdays:
+    day = driver.find_element(By.ID, weekday).get_attribute("innerHTML")
+    soup = BeautifulSoup(day, 'html.parser')
+    slots = soup.find_all("div", class_="innerbox")
+    for slot in slots:
+        divs = slot.find_all("div")
+        for div in divs:
+            match_ = COURSE_PATTERN.search(div.get_text().strip())
+            if match_:
+                lessons[weekday].add(match_.group(0))
+
+for key, value in lessons.items():
+    for lesson in value:
+        if "lec"in lesson.split('_'):
+            fill_timetable(key, lesson.split('_')[0], "Lecture")
+        else:
+            fill_timetable(key, lesson.split('_')[0], "Seminar")
+
+driver.close()
