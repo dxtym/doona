@@ -7,7 +7,6 @@ from datetime import datetime
 
 from dotenv import load_dotenv
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
-from app.database.timetable import show_timetable, show_timetable_by_day
 
 from aiogram import Bot, Dispatcher
 from aiogram.enums import ParseMode
@@ -16,6 +15,7 @@ from aiogram.types import Message, BotCommand
 from aiogram.utils.markdown import hbold
 
 from llamaapi import LlamaAPI
+from utils.timetable import show_timetable_by_day, show_timetable
 
 load_dotenv()
 dp = Dispatcher()
@@ -38,6 +38,15 @@ async def command_waifu_handler(message: Message) -> None:
         await message.answer("Something went wrong")
 
 
+@dp.message(Command("timetable"))
+async def command_timetable_handler(message: Message) -> None:
+    try:
+        await message.answer(show_timetable())
+    except Exception as e:
+        logging.error(e)
+        await message.answer("Something went wrong")
+
+
 @dp.message(Command("support"))
 async def command_support_handler(message: Message) -> None:
     await message.answer("Please contact @thisisdilmurod for support")
@@ -50,7 +59,7 @@ async def echo_message_handler(message: Message) -> None:
             "messages": [
                 {
                     "role": "user",
-                    "content": "Act as my assistant bot namely Doona," + message.text,
+                    "content": "Act as my assistant bot - Doona," + message.text,
                 }
             ]
         }
@@ -72,8 +81,8 @@ async def main() -> None:
     ])
     scheduler = AsyncIOScheduler(timezone='Asia/Tashkent')
     day = datetime.now().strftime("%A")
-    scheduler.add_job(show_timetable_by_day(bot, day), trigger='cron', hour=16, minute=14, start_date=datetime.now(),
-                      kwargs={'bot': bot})
+    scheduler.add_job(show_timetable_by_day, trigger='cron', hour=6, minute=30, start_date=datetime.now(),
+                      args=[bot, day]) 
     scheduler.start()
     await dp.start_polling(bot)
 
