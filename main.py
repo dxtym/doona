@@ -19,7 +19,8 @@ from llamaapi import LlamaAPI
 from utils.timetable import show_timetable_by_day, show_timetable
 from utils.weather import show_daily_weather
 
-LAT, LONG = 41.311081, 69.240562
+LAT: float = 41.311081
+LONG: float = 69.240562
 
 load_dotenv()
 dp = Dispatcher()
@@ -28,18 +29,18 @@ llama = LlamaAPI(os.getenv('API_KEY'))
 
 @dp.message(Command("start"))
 async def command_start_handler(message: Message) -> None:
-    await message.answer(f"Hello, {hbold(message.from_user.full_name)}!")
+    await message.answer(f"👋 Hello, {hbold(message.from_user.full_name)}-chan!")
 
 
 @dp.message(Command("waifu"))
 async def command_waifu_handler(message: Message) -> None:
     try:
-        url = os.getenv("API_URL")
+        url = "https://api.waifu.pics/sfw/waifu"
         response = requests.get(url).json()
         await message.reply_photo(response["url"])
     except Exception as e:
         logging.error(e)
-        await message.answer("Something went wrong")
+        await message.answer("❌ Something went wrong!")
 
 
 @dp.message(Command("timetable"))
@@ -48,7 +49,7 @@ async def command_timetable_handler(message: Message) -> None:
         await message.answer(show_timetable())
     except Exception as e:
         logging.error(e)
-        await message.answer("Something went wrong")
+        await message.answer("❌ Something went wrong!")
 
 
 @dp.message(Command("weather"))
@@ -60,20 +61,16 @@ async def command_weather_handler(message: Message) -> None:
             "appid": os.getenv("WEATHER_API_KEY"),
             "units": "metric",
         }
-        response = requests.get("https://api.openweathermap.org/data/2.5/weather", params=params).json()
-        weather = response["weather"][0]["main"]
+        response = requests.get(
+            "https://api.openweathermap.org/data/2.5/weather", 
+            params=params).json()
+        weather = response["weather"][0]["main"].upper()
         temp = response["main"]["temp"]
         humidity = response["main"]["humidity"]
-        await message.answer(f"Today's weather: {weather}\nTemperature: {temp}°C\nHumidity: {humidity}%")
+        await message.answer(f"⛅ Weather:\nSummary: {weather}\nTemperature: {temp}°C\nHumidity: {humidity}%")
     except Exception as e:
         logging.error(e)
-        logging.error(response)
-        await message.answer("Something went wrong")
-
-
-@dp.message(Command("support"))
-async def command_support_handler(message: Message) -> None:
-    await message.answer("Please contact @thisisdilmurod for support")
+        await message.answer("❌ Something went wrong!")
 
 
 @dp.message()
@@ -83,7 +80,7 @@ async def echo_message_handler(message: Message) -> None:
             "messages": [
                 {
                     "role": "user",
-                    "content": "Act as my assistant bot - Doona," + message.text,
+                    "content": "Act as my assistant - Doona," + message.text,
                 }
             ]
         }
@@ -101,7 +98,6 @@ async def main() -> None:
         BotCommand(command="/waifu", description="Get a random waifu"),
         BotCommand(command="/timetable", description="View weekly timetable"),
         BotCommand(command="/weather", description="Check out the weather"),
-        BotCommand(command="/support", description="Call for support"),
     ])
     scheduler = AsyncIOScheduler(timezone='Asia/Tashkent')
     day = datetime.now().strftime("%A")

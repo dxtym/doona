@@ -10,24 +10,28 @@ from selenium.webdriver.common.by import By
 
 load_dotenv()
 
+COURSE_PATTERN = re.compile(fr"{os.getenv('COURSE_PATTERN')}")
+
 db = sql.connect("../app/database/timetable.db")
 cursor = db.cursor()
 
-def start_timetable():
+
+def start_timetable() -> None:
     cursor.execute("CREATE TABLE IF NOT EXISTS timetable(day TEXT, subject TEXT, type TEXT)")
     db.commit()
 
-def fill_timetable(day, subject, type):
+
+def fill_timetable(day: str, subject: str, type: str) -> None:
     cursor.execute(f"INSERT INTO timetable(day, subject, type) VALUES('{day}', '{subject}', '{type}')")
     db.commit()
 
-def show_timetable():
+
+def show_timetable() -> None:
     cursor.execute("SELECT * FROM timetable")
     return cursor.fetchall()
 
-start_timetable()
 
-COURSE_PATTERN = re.compile(fr"{os.getenv('COURSE_PATTERN')}")
+start_timetable()
 
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_experimental_option("detach", True)
