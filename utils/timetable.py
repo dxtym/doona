@@ -8,6 +8,7 @@ cursor = db.cursor()
 
 CHAT_ID = os.getenv("CHAT_ID")
 
+
 def show_timetable():
     cursor.execute("SELECT * FROM timetable")
     classes = cursor.fetchall()

@@ -8,6 +8,7 @@ from datetime import datetime
 from dotenv import load_dotenv
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
+from aiogram import F
 from aiogram import Bot, Dispatcher
 from aiogram.enums import ParseMode
 from aiogram.filters.command import Command
@@ -16,6 +17,9 @@ from aiogram.utils.markdown import hbold
 
 from llamaapi import LlamaAPI
 from utils.timetable import show_timetable_by_day, show_timetable
+from utils.weather import show_daily_weather
+
+LAT, LONG = 41.311081, 69.240562
 
 load_dotenv()
 dp = Dispatcher()
@@ -44,6 +48,26 @@ async def command_timetable_handler(message: Message) -> None:
         await message.answer(show_timetable())
     except Exception as e:
         logging.error(e)
+        await message.answer("Something went wrong")
+
+
+@dp.message(Command("weather"))
+async def command_weather_handler(message: Message) -> None:
+    try:
+        params = {
+            "lat": LAT,
+            "lon": LONG,
+            "appid": os.getenv("WEATHER_API_KEY"),
+            "units": "metric",
+        }
+        response = requests.get("https://api.openweathermap.org/data/2.5/weather", params=params).json()
+        weather = response["weather"][0]["main"]
+        temp = response["main"]["temp"]
+        humidity = response["main"]["humidity"]
+        await message.answer(f"Today's weather: {weather}\nTemperature: {temp}°C\nHumidity: {humidity}%")
+    except Exception as e:
+        logging.error(e)
+        logging.error(response)
         await message.answer("Something went wrong")
 
 
@@ -82,7 +106,9 @@ async def main() -> None:
     scheduler = AsyncIOScheduler(timezone='Asia/Tashkent')
     day = datetime.now().strftime("%A")
     scheduler.add_job(show_timetable_by_day, trigger='cron', hour=6, minute=30, start_date=datetime.now(),
-                      args=[bot, day]) 
+                      args=[bot, day])
+    scheduler.add_job(show_daily_weather, trigger='cron', hour=6, minute=30, start_date=datetime.now(),
+                      args=[bot]) 
     scheduler.start()
     await dp.start_polling(bot)
 
