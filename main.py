@@ -17,6 +17,7 @@ from aiogram.types import Message, BotCommand
 from aiogram.utils.markdown import hbold
 
 from llamaapi import LlamaAPI
+from utils.config import llama_message
 from utils.timetable import show_timetable_by_day, show_timetable
 from utils.weather import show_daily_weather
 
@@ -92,7 +93,7 @@ async def echo_message_handler(message: Message) -> None:
             "messages": [
                 {
                     "role": "user",
-                    "content": "Act as my assistant - Doona," + message.text,
+                    "content": llama_message + message.text,
                 }
             ]
         }
