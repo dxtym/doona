@@ -17,12 +17,11 @@ from aiogram.types import Message, BotCommand
 from aiogram.utils.markdown import hbold
 
 from llamaapi import LlamaAPI
-from utils.config import llama_message
+from utils.config import LLAMA_MESSAGE, LAT, LONG, STICKERS
 from utils.timetable import show_timetable_by_day, show_timetable
 from utils.weather import show_daily_weather
 
-LAT: float = 41.311081
-LONG: float = 69.240562
+
 
 load_dotenv()
 dp = Dispatcher()
@@ -31,7 +30,10 @@ llama = LlamaAPI(os.getenv('API_KEY'))
 
 @dp.message(Command("start"))
 async def command_start_handler(message: Message) -> None:
-    await message.answer_sticker("CAACAgIAAxkBAAELLCZlos_v7O7sRX4zAZl2h6BkKmXkhwACDBgAAnHMfRhhqqr6VOP81zQE", protect_content=True)
+    await message.answer_sticker(
+        "CAACAgIAAxkBAAELLCZlos_v7O7sRX4zAZl2h6BkKmXkhwACDBgAAnHMfRhhqqr6VOP81zQE", 
+        protect_content=True
+        )
     await message.answer(f"👋 Hello, {hbold(message.from_user.full_name)}-chan!")
 
 
@@ -80,10 +82,11 @@ async def command_weather_handler(message: Message) -> None:
 
 @dp.message(Command("stop"))
 async def command_stop_handler(message: Message) -> None:
-    await message.answer_sticker("CAACAgIAAxkBAAELLL9lo4tpheuEG46rhHY3MnbhFK8ibgACPBgAAnHMfRjAnBo1wPnRDzQE", protect_content=True)
+    await message.answer_sticker(
+        "CAACAgIAAxkBAAELLL9lo4tpheuEG46rhHY3MnbhFK8ibgACPBgAAnHMfRjAnBo1wPnRDzQE", 
+        protect_content=True
+        )
     await message.answer("👋 Bye-bye!")
-    await dp.storage.close()
-    await dp.bot.close()
 
 
 @dp.message()
@@ -93,7 +96,7 @@ async def echo_message_handler(message: Message) -> None:
             "messages": [
                 {
                     "role": "user",
-                    "content": llama_message + message.text,
+                    "content": LLAMA_MESSAGE + message.text,
                 }
             ]
         }
@@ -107,14 +110,7 @@ async def echo_message_handler(message: Message) -> None:
 
 @dp.message(F.photo)
 async def echo_photo_handler(message: Message) -> None:
-    stickers = [
-        "CAACAgIAAxkBAAELLKhlo4VkCXKyJncZ2ujWbLgy1lCI5wACQRgAAnHMfRgCirO0jpF8YTQE",
-        "CAACAgIAAxkBAAELLKplo4WKfs8ZCM6PBHNP05Q0GCdSgAACMBgAAnHMfRg-h_bDnMJUwDQE",
-        "CAACAgIAAxkBAAELLKxlo4Wqst39t8xlY1umu_3oVYGCkwACMxgAAnHMfRiy6dSqBFtuIDQE",
-        "CAACAgIAAxkBAAELLK5lo4XGGTZnRHIh6RlDEeXaEv98wAACDxgAAnHMfRgfbzJipLkpfjQE",
-        "CAACAgIAAxkBAAELLLJlo4YEprsB4q1Rsd8qT6fPgPiDfQACOBgAAnHMfRie2x-HSYH7oTQE",
-    ]
-    await message.answer_sticker(random.choice(stickers), protect_content=True)
+    await message.answer_sticker(random.choice(STICKERS), protect_content=True)
 
 
 async def main() -> None:

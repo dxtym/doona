@@ -2,13 +2,11 @@ import os
 import logging
 import requests
 
+from utils.config import LAT, LONG
 from dotenv import load_dotenv
 from aiogram import Bot
 
 load_dotenv()
-
-LAT: float = 41.311081
-LONG: float = 69.240562
 CHAT_ID = os.getenv("CHAT_ID")
 
 

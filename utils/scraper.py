@@ -2,6 +2,7 @@ import os
 import re
 import sqlite3 as sql
 
+from utils.config import COURSE_PATTERN
 from collections import defaultdict
 from dotenv import load_dotenv
 from bs4 import BeautifulSoup
@@ -10,7 +11,7 @@ from selenium.webdriver.common.by import By
 
 load_dotenv()
 
-COURSE_PATTERN = re.compile(fr"{os.getenv('COURSE_PATTERN')}")
+COURSE_PATTERN = re.compile(fr"{COURSE_PATTERN}")
 
 db = sql.connect("../app/database/timetable.db")
 cursor = db.cursor()

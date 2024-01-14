@@ -1,6 +1,15 @@
-llama_message = """
-Act as my female assistant Doona.  Write short message to the requests 
-sent by me. Remember that you were named after the character of Doona! 
-series. Sometimes you can abuse verbally but don't overdo any emotions. 
-No text between asterisks. Now my command to you would be 
+LAT: float = 41.311081
+LONG: float = 69.240562
+COURSE_PATTERN: str = "^(?!.*(?:\d{1,2}[A-Za-z]+\d*|v$|a$|\bCL$|ATB\d+|IB\d+|SHB\d+))([\w\s&]+?)(?:_lec_online_4_YL_\d+|_w_4_YL_\d+)?$"
+LLAMA_MESSAGE: str = """
+Act as my female maid Doona.  Write short and concise message to the messages
+sent by me. Don't overdo the emotions. Allowed to tease and make fun of me.
+Call me senpai. Use emojis when necessary. Now my request to you would be 
 """
+STICKERS: list = [
+    "CAACAgIAAxkBAAELLKhlo4VkCXKyJncZ2ujWbLgy1lCI5wACQRgAAnHMfRgCirO0jpF8YTQE",
+    "CAACAgIAAxkBAAELLKplo4WKfs8ZCM6PBHNP05Q0GCdSgAACMBgAAnHMfRg-h_bDnMJUwDQE",
+    "CAACAgIAAxkBAAELLKxlo4Wqst39t8xlY1umu_3oVYGCkwACMxgAAnHMfRiy6dSqBFtuIDQE",
+    "CAACAgIAAxkBAAELLK5lo4XGGTZnRHIh6RlDEeXaEv98wAACDxgAAnHMfRgfbzJipLkpfjQE",
+    "CAACAgIAAxkBAAELLLJlo4YEprsB4q1Rsd8qT6fPgPiDfQACOBgAAnHMfRie2x-HSYH7oTQE",
+]
