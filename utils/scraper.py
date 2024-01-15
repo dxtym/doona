@@ -13,7 +13,7 @@ load_dotenv()
 
 COURSE_PATTERN = re.compile(fr"{COURSE_PATTERN}")
 
-db = sql.connect("../app/database/timetable.db")
+db = sql.connect("../data/timetable.db")
 cursor = db.cursor()
 
 
