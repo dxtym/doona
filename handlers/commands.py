@@ -25,7 +25,7 @@ async def command_start_handler(message: Message) -> None:
 @router.message(Command("todo"))
 async def command_todo_handler(message: Message) -> None:
     await message.answer(
-        f"📝 Things you've to finish:\n",
+        f"📝 Stuff you've to finish:\n",
         reply_markup=todo_keyboard
     )
 
@@ -35,7 +35,7 @@ async def command_timetable_handler(message: Message) -> None:
         await message.answer(show_timetable())
     except Exception as e:
         logging.error(e)
-        await message.answer("❌ Something went wrong!")
+        await message.answer("❌ You sure are a problem, dude!")
 
 
 @router.message(Command("weather"))
@@ -55,10 +55,10 @@ async def command_weather_handler(message: Message) -> None:
         temp = response["main"]["temp"]
         humidity = response["main"]["humidity"]
 
-        await message.answer(f"⛅ You're so lazy...\nSummary: {weather}\nTemperature: {temp}°C\nHumidity: {humidity}%")
+        await message.answer(f"⛅ Go ask someone else!\nSummary: {weather}\nTemperature: {temp}°C\nHumidity: {humidity}%")
     except Exception as e:
         logging.error(e)
-        await message.answer("❌ Something went wrong!")
+        await message.answer("❌ You sure are a problem, dude!")
 
 
 @router.message(Command("waifu"))
@@ -67,9 +67,10 @@ async def command_waifu_handler(message: Message) -> None:
         url = "https://api.waifu.pics/sfw/waifu"
         response = requests.get(url).json()
         await message.reply_photo(response["url"])
+        await message.answer("👀 What a weeb!")
     except Exception as e:
         logging.error(e)
-        await message.answer("❌ Something went wrong!")
+        await message.answer("❌ You sure are a problem, dude!")
 
 
 @router.message(Command("stop"))

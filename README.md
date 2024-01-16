@@ -3,7 +3,3 @@
 ## 🧩 What's Doona?
 * Doona serves as an AI assistant built by [Dilmurod](https://github.com/thisisdilmurod). 
 * It was named after the character of Doona! series.
-
-1. Move todos to JSON
-2. Add callback for deleting/adding
-3. Move timetable db to JSON

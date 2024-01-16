@@ -9,7 +9,7 @@ load_dotenv()
 
 CHAT_ID = os.getenv("CHAT_ID")
 
-db = sql.connect("data/timetable.db")
+db = sql.connect("./data/timetable.db")
 cursor = db.cursor()
 
 
