@@ -1,10 +1,8 @@
 import os
 import logging
-
 from dotenv import load_dotenv
 from aiogram import Router
 from aiogram.types import Message
-
 from llamaapi import LlamaAPI
 from utils.config import LLAMA_MESSAGE
 

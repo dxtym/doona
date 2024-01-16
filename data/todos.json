@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "task": "Complete proposal"
+  },
+  {
+    "id": 2,
+    "task": "Buy groceries"
+  },
+  {
+    "id": 3,
+    "task": "Read a book"
+  }
+]

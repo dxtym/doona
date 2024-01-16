@@ -1,7 +1,6 @@
 import os
 import logging
 import requests
-
 from utils.config import LAT, LONG
 from dotenv import load_dotenv
 from aiogram import Bot

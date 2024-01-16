@@ -1,13 +1,11 @@
 import os
 import logging
 import requests
-
 from dotenv import load_dotenv
 from aiogram import Router
 from aiogram.types import Message
 from aiogram.filters import Command, CommandStart
 from aiogram.utils.markdown import hbold
-
 from keyboards.todo import todo_keyboard
 from utils.config import LAT, LONG
 from utils.timetable import show_timetable
@@ -27,7 +25,7 @@ async def command_start_handler(message: Message) -> None:
 @router.message(Command("todo"))
 async def command_todo_handler(message: Message) -> None:
     await message.answer(
-        f"📝 {hbold('ToDo:')}\n",
+        f"📝 Things you've to finish:\n",
         reply_markup=todo_keyboard
     )
 
@@ -57,7 +55,7 @@ async def command_weather_handler(message: Message) -> None:
         temp = response["main"]["temp"]
         humidity = response["main"]["humidity"]
 
-        await message.answer(f"⛅ Weather:\nSummary: {weather}\nTemperature: {temp}°C\nHumidity: {humidity}%")
+        await message.answer(f"⛅ You're so lazy...\nSummary: {weather}\nTemperature: {temp}°C\nHumidity: {humidity}%")
     except Exception as e:
         logging.error(e)
         await message.answer("❌ Something went wrong!")

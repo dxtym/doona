@@ -1,6 +1,5 @@
 import os
 import sqlite3 as sql
-
 from dotenv import load_dotenv
 from aiogram import Bot
 from aiogram.utils.markdown import hbold, hitalic

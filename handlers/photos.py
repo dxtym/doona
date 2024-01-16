@@ -1,8 +1,6 @@
 import random
-
 from aiogram import Router, F
 from aiogram.types import Message
-
 from utils.config import STICKERS
 
 router = Router()

@@ -3,19 +3,15 @@ import asyncio
 import logging
 import sys
 from datetime import datetime
-
 from dotenv import load_dotenv
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
-
 from aiogram import Bot, Dispatcher
 from aiogram.enums import ParseMode
 from aiogram.types import BotCommand
-
 from utils.timetable import show_timetable_by_day
 from utils.weather import show_daily_weather
-
 from handlers import commands, messages, photos
-
+from callbacks import todos
 load_dotenv()
 
 
@@ -23,9 +19,10 @@ async def main() -> None:
     bot = Bot(os.getenv('TOKEN'), parse_mode=ParseMode.HTML)
     dp = Dispatcher()
     dp.include_routers(
+        todos.router,
         commands.router,
         photos.router,
-        messages.router,
+        messages.router
     )
     await bot.set_my_commands([
         BotCommand(command="/start", description="Start the bot"),

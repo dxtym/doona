@@ -1,8 +1,7 @@
 import os
 import re
 import sqlite3 as sql
-
-from utils.config import COURSE_PATTERN
+from config import COURSE_PATTERN
 from collections import defaultdict
 from dotenv import load_dotenv
 from bs4 import BeautifulSoup
