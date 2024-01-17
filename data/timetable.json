@@ -1,0 +1,68 @@
+{
+    "Monday": [
+        {
+            "subject": "Introduction to Management and Organisational Beha",
+            "type": "Lecture"
+        },
+        {
+            "subject": "Introduction to Management and Organisational Beha",
+            "type": "Seminar"
+        },
+        {
+            "subject": "Introduction to Management and Organisational Beha",
+            "type": "Seminar"
+        }
+    ],
+    "Tuesday": [
+        {
+            "subject": "Web Technology",
+            "type": "Seminar"
+        },
+        {
+            "subject": "Web Technology",
+            "type": "Seminar"
+        },
+        {
+            "subject": "Graphic design",
+            "type": "Lecture"
+        },
+        {
+            "subject": "Graphic design",
+            "type": "Lecture"
+        }
+    ],
+    "Wednesday": [
+        {
+            "subject": "Fundamentals of Programming",
+            "type": "Lecture"
+        }
+    ],
+    "Thursday": [
+        {
+            "subject": "Graphic design",
+            "type": "Seminar"
+        },
+        {
+            "subject": "Graphic design",
+            "type": "Seminar"
+        }
+    ],
+    "Friday": [
+        {
+            "subject": "Fundamentals of Programming",
+            "type": "Seminar"
+        },
+        {
+            "subject": "Fundamentals of Programming",
+            "type": "Seminar"
+        },
+        {
+            "subject": "Introduction to Statistics and Data Science",
+            "type": "Seminar"
+        },
+        {
+            "subject": "Introduction to Statistics and Data Science",
+            "type": "Seminar"
+        }
+    ]
+}

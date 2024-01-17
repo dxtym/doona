@@ -35,7 +35,7 @@ async def main() -> None:
     ])
     scheduler = AsyncIOScheduler(timezone='Asia/Tashkent')
     day = datetime.now().strftime("%A")
-    scheduler.add_job(show_timetable_by_day, trigger='cron', hour=6, minute=30, start_date=datetime.now(),
+    scheduler.add_job(show_timetable_by_day, trigger='cron', hour=6, minute=29, start_date=datetime.now(),
                       args=[bot, day])
     scheduler.add_job(show_daily_weather, trigger='cron', hour=6, minute=30, start_date=datetime.now(),
                       args=[bot]) 
