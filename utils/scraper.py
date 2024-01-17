@@ -55,7 +55,8 @@ for weekday in weekdays:
             match_ = COURSE_PATTERN.search(div.get_text().strip())
             if match_:
                 lessons[weekday].append({
-                    "subject": match_.group(0).split('_')[0], "type": "Lecture" if "lec" in match_.group(0).split('_') else "Seminar"
+                    "subject": match_.group(0).split('_')[0], "type": "Lecture" 
+                    if "lec" in match_.group(0).split('_') else "Seminar"
                 })
 
 for key, value in lessons.items():

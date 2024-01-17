@@ -1,17 +1,19 @@
 import os
+import json
 import logging
 import requests
 from dotenv import load_dotenv
 from aiogram import Router
 from aiogram.types import Message
 from aiogram.filters import Command, CommandStart
-from aiogram.utils.markdown import hbold
+from collections import defaultdict
+from aiogram.utils.markdown import hbold, hitalic
 from keyboards.todo import todo_keyboard
 from utils.config import LAT, LONG
-from utils.timetable import show_timetable
 
 load_dotenv()
 router = Router()
+
 
 @router.message(CommandStart())
 async def command_start_handler(message: Message) -> None:
@@ -29,10 +31,26 @@ async def command_todo_handler(message: Message) -> None:
         reply_markup=todo_keyboard
     )
 
+
 @router.message(Command("timetable"))
 async def command_timetable_handler(message: Message) -> None:
     try:
-        await message.answer(show_timetable())
+        with open("./data/timetable.json", "r") as f:
+            classes = json.loads(f.read())
+
+        if not classes:
+            await message.answer("🍜 No classes today, chill!")
+        else:
+            timetable = defaultdict(str)
+            message_ = "📋 Check the timetable yourself, nerd! \n"
+
+            for day, class_ in classes.items():
+                for slot in class_:
+                    timetable[day] += f"{slot['subject']} - {slot['type']}\n"
+            for weekday, classes in timetable.items():
+                message_ += f"{hbold(weekday)}: \n{hitalic(classes)}\n"
+
+            await message.answer(message_)
     except Exception as e:
         logging.error(e)
         await message.answer("❌ You sure are a problem, dude!")
@@ -66,6 +84,7 @@ async def command_waifu_handler(message: Message) -> None:
     try:
         url = "https://api.waifu.pics/sfw/waifu"
         response = requests.get(url).json()
+
         await message.reply_photo(response["url"])
         await message.answer("👀 What a weeb!")
     except Exception as e:

@@ -16,7 +16,7 @@ async def delete_task(query: CallbackQuery) -> None:
         if todo["id"] == task_id:
             todos.remove(todo)
             break
-    json.dump(todos, open("./data/todos.json", "w"))
+    json.dump(todos, open("./data/todos.json", "w"), indent=4)
 
     todo_keyboard = generate_todo_keyboard()
 
