@@ -43,13 +43,11 @@ async def command_timetable_handler(message: Message) -> None:
         else:
             timetable = defaultdict(str)
             message_ = "📋 Check the timetable yourself, nerd! \n"
-
             for day, class_ in classes.items():
                 for slot in class_:
                     timetable[day] += f"{slot['subject']} - {slot['type']}\n"
             for weekday, classes in timetable.items():
                 message_ += f"{hbold(weekday)}: \n{hitalic(classes)}\n"
-
             await message.answer(message_)
     except Exception as e:
         logging.error(e)
@@ -65,14 +63,12 @@ async def command_weather_handler(message: Message) -> None:
             "appid": os.getenv("WEATHER_API_KEY"),
             "units": "metric",
         }
-
         response = requests.get(
             "https://api.openweathermap.org/data/2.5/weather", 
             params=params).json()
         weather = response["weather"][0]["main"].capitalize()
         temp = response["main"]["temp"]
         humidity = response["main"]["humidity"]
-
         await message.answer(f"⛅ Go ask someone else!\nSummary: {weather}\nTemperature: {temp}°C\nHumidity: {humidity}%")
     except Exception as e:
         logging.error(e)
@@ -84,7 +80,6 @@ async def command_waifu_handler(message: Message) -> None:
     try:
         url = "https://api.waifu.pics/sfw/waifu"
         response = requests.get(url).json()
-
         await message.reply_photo(response["url"])
         await message.answer("👀 What a weeb!")
     except Exception as e:

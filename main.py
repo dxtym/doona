@@ -11,7 +11,7 @@ from aiogram.types import BotCommand
 from callbacks import tasks
 from utils.timetable import show_timetable_by_day
 from utils.weather import show_daily_weather
-from handlers import commands, messages, photos
+from handlers import commands, messages, photos, links
 
 load_dotenv()
 
@@ -23,6 +23,7 @@ async def main() -> None:
         commands.router,
         photos.router,
         tasks.router,
+        links.router,
         messages.router
     )
     await bot.set_my_commands([

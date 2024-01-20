@@ -21,7 +21,6 @@ async def echo_message_handler(message: Message) -> None:
                 }
             ]
         }
-
         response = llama.run(request).json()
         await message.reply(response["choices"][0]["message"]["content"])
     except Exception as e:

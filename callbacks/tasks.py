@@ -19,9 +19,7 @@ async def delete_task(query: CallbackQuery) -> None:
             todos.remove(todo)
             break
     json.dump(todos, open("./data/todos.json", "w"), indent=4)
-
     todo_keyboard = generate_todo_keyboard()
-
     with suppress(TelegramBadRequest):
         await query.message.edit_text(
             f"📝 Things you've to finish:\n",
@@ -44,7 +42,6 @@ async def task_name(message: Message, state: FSMContext) -> None:
         "task": message.text
     })
     json.dump(todos, open("./data/todos.json", "w"), indent=4)
-
     await state.clear()
     todo_keyboard = generate_todo_keyboard()
     await message.answer(
