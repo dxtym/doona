@@ -1,9 +1,8 @@
 import os
 import random
-import aiofiles
 from pytube import YouTube
 from aiogram import Router, F
-from aiogram.types import Message, InputFile
+from aiogram.types import Message, FSInputFile
 from utils.config import STICKERS
 
 router = Router()
@@ -17,18 +16,10 @@ async def link_handler(message: Message) -> None:
             yt = YouTube(link_encoded)
             caption_text = f"<b>Title: </b>{yt.title}\n\n<b>By: </b>{yt.author}"
             video = yt.streams.get_highest_resolution()
-            await message.reply_photo(yt.thumbnail_url, caption=caption_text)
-            await message.answer("🍟 Do you have nothing else to do?")
             file_path = os.path.join("temp", f"{message.from_user.id}.mp4")
             video.download(filename=file_path)
-            async with aiofiles.open(file_path, "rb") as video_file:
-                await message.answer_video(InputFile(video_file))
+            await message.answer_video(FSInputFile(file_path), caption=caption_text)
+            await message.answer("🍟 Do you have nothing else to do?")
             os.remove(file_path)
-        case "tiktok":
-            # TODO: Add download TikTok support
-            await message.answer("🎈 I don't have time to scroll TikTok")
-        case "instagram":
-            # TODO: Add download Instagram support
-            await message.answer("🎈 I don't have time to scroll Instagram")
         case _:
-            await message.answer(random.choice(STICKERS))
+            await message.answer_sticker(random.choice(STICKERS))

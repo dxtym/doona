@@ -27,6 +27,7 @@ pydantic_core==2.14.6
 PySocks==1.7.1
 python-dateutil==2.8.2
 python-dotenv==1.0.0
+pytube==15.0.0
 pytz==2023.3.post1
 requests==2.31.0
 selenium==4.16.0
