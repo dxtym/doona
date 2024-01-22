@@ -22,4 +22,4 @@ If time allows, I'm looking forward to deploy the bot on a VPS/VDS server and ad
 
 ## 📬 Found errors?
 
-Do not hesistate to [email](mailto:dilmurod.abdusamadov2004@gmail.com) or contact me via [Telegram](t.me/thisisdilmurod). `<b>`Let's chat!`</b>`
+Do not hesistate to [email](mailto:dilmurod.abdusamadov2004@gmail.com) or contact me via [Telegram](https://t.me/thisisdiImurod)https://t.me/thisisdiImurod). <b>Let's chat!</b>
